@@ -38,6 +38,16 @@ export default function Home() {
       fetchMemos()
     }
   }
+  
+  const deleteMemo = async (id: string) => {
+    const { error } = await supabase.from('memos').delete().eq('id', id)
+    if (error) {
+      console.error('Delete error:', error.message)
+      alert('削除に失敗しました: ' + error.message)
+    } else {
+      fetchMemos()
+    }
+  }
 
   return (
     <main style={{ padding: '2rem' }}>
@@ -51,7 +61,12 @@ export default function Home() {
       <button onClick={addMemo}>追加</button>
       <ul>
         {memos.map((memo) => (
-          <li key={memo.id}>{memo.content}</li>
+          <li key={memo.id}>
+          {memo.content}
+          <button onClick={() => deleteMemo(memo.id)} style={{ marginLeft: '1rem' }}>
+          削除
+          </button>
+          </li>
         ))}
       </ul>
     </main>
